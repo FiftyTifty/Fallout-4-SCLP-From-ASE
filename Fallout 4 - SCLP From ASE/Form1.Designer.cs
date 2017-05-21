@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.groupFilePaths = new System.Windows.Forms.GroupBox();
-            this.buttonSourcePath = new System.Windows.Forms.Button();
-            this.textboxSourcePath = new System.Windows.Forms.TextBox();
-            this.buttonModPath = new System.Windows.Forms.Button();
-            this.textboxModPath = new System.Windows.Forms.TextBox();
             this.buttonMakeSCLP = new System.Windows.Forms.Button();
+            this.textboxModPath = new System.Windows.Forms.TextBox();
+            this.buttonModPath = new System.Windows.Forms.Button();
+            this.textboxSourcePath = new System.Windows.Forms.TextBox();
+            this.buttonSourcePath = new System.Windows.Forms.Button();
             this.dialogSourcePath = new System.Windows.Forms.OpenFileDialog();
             this.dialogModPath = new System.Windows.Forms.OpenFileDialog();
             this.dialogMakeSCLP = new System.Windows.Forms.SaveFileDialog();
@@ -55,22 +55,23 @@
             this.groupFilePaths.Text = "ASE File Paths";
             this.groupFilePaths.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // buttonSourcePath
+            // buttonMakeSCLP
             // 
-            this.buttonSourcePath.Location = new System.Drawing.Point(6, 19);
-            this.buttonSourcePath.Name = "buttonSourcePath";
-            this.buttonSourcePath.Size = new System.Drawing.Size(75, 23);
-            this.buttonSourcePath.TabIndex = 0;
-            this.buttonSourcePath.Text = "Source";
-            this.buttonSourcePath.UseVisualStyleBackColor = true;
-            this.buttonSourcePath.Click += new System.EventHandler(this.buttonSourcePath_Click);
+            this.buttonMakeSCLP.Enabled = false;
+            this.buttonMakeSCLP.Location = new System.Drawing.Point(226, 84);
+            this.buttonMakeSCLP.Name = "buttonMakeSCLP";
+            this.buttonMakeSCLP.Size = new System.Drawing.Size(75, 23);
+            this.buttonMakeSCLP.TabIndex = 4;
+            this.buttonMakeSCLP.Text = "Generate";
+            this.buttonMakeSCLP.UseVisualStyleBackColor = true;
+            this.buttonMakeSCLP.Click += new System.EventHandler(this.buttonMakeSCLP_Click);
             // 
-            // textboxSourcePath
+            // textboxModPath
             // 
-            this.textboxSourcePath.Location = new System.Drawing.Point(87, 22);
-            this.textboxSourcePath.Name = "textboxSourcePath";
-            this.textboxSourcePath.Size = new System.Drawing.Size(430, 20);
-            this.textboxSourcePath.TabIndex = 1;
+            this.textboxModPath.Location = new System.Drawing.Point(87, 50);
+            this.textboxModPath.Name = "textboxModPath";
+            this.textboxModPath.Size = new System.Drawing.Size(430, 20);
+            this.textboxModPath.TabIndex = 3;
             // 
             // buttonModPath
             // 
@@ -82,23 +83,22 @@
             this.buttonModPath.UseVisualStyleBackColor = true;
             this.buttonModPath.Click += new System.EventHandler(this.buttonModPath_Click);
             // 
-            // textboxModPath
+            // textboxSourcePath
             // 
-            this.textboxModPath.Location = new System.Drawing.Point(87, 50);
-            this.textboxModPath.Name = "textboxModPath";
-            this.textboxModPath.Size = new System.Drawing.Size(430, 20);
-            this.textboxModPath.TabIndex = 3;
+            this.textboxSourcePath.Location = new System.Drawing.Point(87, 22);
+            this.textboxSourcePath.Name = "textboxSourcePath";
+            this.textboxSourcePath.Size = new System.Drawing.Size(430, 20);
+            this.textboxSourcePath.TabIndex = 1;
             // 
-            // buttonMakeSCLP
+            // buttonSourcePath
             // 
-            this.buttonMakeSCLP.Enabled = false;
-            this.buttonMakeSCLP.Location = new System.Drawing.Point(226, 84);
-            this.buttonMakeSCLP.Name = "buttonMakeSCLP";
-            this.buttonMakeSCLP.Size = new System.Drawing.Size(75, 23);
-            this.buttonMakeSCLP.TabIndex = 4;
-            this.buttonMakeSCLP.Text = "Generate";
-            this.buttonMakeSCLP.UseVisualStyleBackColor = true;
-            this.buttonMakeSCLP.Click += new System.EventHandler(this.buttonMakeSCLP_Click);
+            this.buttonSourcePath.Location = new System.Drawing.Point(6, 19);
+            this.buttonSourcePath.Name = "buttonSourcePath";
+            this.buttonSourcePath.Size = new System.Drawing.Size(75, 23);
+            this.buttonSourcePath.TabIndex = 0;
+            this.buttonSourcePath.Text = "Source";
+            this.buttonSourcePath.UseVisualStyleBackColor = true;
+            this.buttonSourcePath.Click += new System.EventHandler(this.buttonSourcePath_Click);
             // 
             // dialogSourcePath
             // 
@@ -112,6 +112,7 @@
             // 
             // dialogMakeSCLP
             // 
+            this.dialogMakeSCLP.DefaultExt = "sclp";
             this.dialogMakeSCLP.Filter = "Fallout 4 SCLP|*.sclp";
             // 
             // windowProgram

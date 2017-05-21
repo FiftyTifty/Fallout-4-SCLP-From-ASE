@@ -148,11 +148,13 @@ namespace Fallout_4___SCLP_From_ASE
         {
             string strBoneName;
             string strLineMod = strLine;
-            int iQuotationIndex;
 
+            //MessageBox.Show(strLineMod);
             strLineMod = strLineMod.Substring(iFindNodeNameLength, strLineMod.Length - iFindNodeNameLength);
-            iQuotationIndex = strLineMod.IndexOf("\"");
-            strBoneName = strLineMod.Substring(0, iQuotationIndex);
+            //MessageBox.Show(strLineMod);
+            strBoneName = strLineMod.Substring(0, strLineMod.Length - 1);
+            strBoneName = strBoneName.Remove(0, 2); //Have to remove two characters to cut out the ". Dunno why.
+            //MessageBox.Show("Bone Name Is: "+strBoneName);
 
             return strBoneName;
         }
@@ -161,10 +163,16 @@ namespace Fallout_4___SCLP_From_ASE
         //Begin Main
         private void buttonMakeSCLP_Click(object sender, EventArgs e)
         {
+            if (!(File.Exists(textboxModPath.Text)) || !(File.Exists(textboxSourcePath.Text)))
+            {
+                MessageBox.Show("Your ASE file paths are invalid!");
+                return;
+            }
 
             #region
             List<string> listSourceASE = File.ReadLines(strSourcePath).ToList();
             List<string> listModASE = File.ReadLines(strModPath).ToList();
+            List<string> listBoneData = new List<string>();
 
             List<int> listiGeomObjectIndex = new List<int>();
             List<int> listiNodeNameIndex = new List<int>();
@@ -179,7 +187,7 @@ namespace Fallout_4___SCLP_From_ASE
 
             //Get the indexes of the bone structures' data
             #region
-            for (iCounter = 0; iCounter <= (listSourceASE.Count - 1); iCounter++)
+            for (iCounter = 0; iCounter < listSourceASE.Count - 1; iCounter++)
             {
                 if (listSourceASE[iCounter].Contains(strFindGeomObject))
                 {
@@ -193,7 +201,7 @@ namespace Fallout_4___SCLP_From_ASE
 
 
             //Get indexes of unchanged bones
-            for (iCounter = 0; iCounter <= (iNumBones - 1); iCounter++)
+            for (iCounter = 0; iCounter < iNumBones; iCounter++)
             {
                 if (listSourceASE[listiTMScaleIndex[iCounter]] == listModASE[listiTMScaleIndex[iCounter]])
                 {
@@ -204,7 +212,7 @@ namespace Fallout_4___SCLP_From_ASE
             //Remove unchanged bone indexes from lists
             foreach (int iIndex in listiDuplicateBoneIndex)
             {
-                
+
                 for (iCounter = (iNumBones - 1); iCounter >= 0; iCounter--)
                 {
                     if (iIndex == listiGeomObjectIndex[iCounter])
@@ -224,13 +232,19 @@ namespace Fallout_4___SCLP_From_ASE
 
             //Create arrays for all the modified bones
             classASEBone[] arrayaseboneMod = new classASEBone[iNumBones];
+            for (iCounter = 0; iCounter < iNumBones; iCounter++)
+            {
+                arrayaseboneMod[iCounter] = new classASEBone();
+            }
+
             string[] arraystrBoneXYZ = new string[3];
             string strBoneName;
 
             string strLineTMScale;
             string strLineNodeName;
 
-            for (iCounter = 0; iCounter <= (iNumBones - 1); iCounter++)
+            #region
+            for (iCounter = 0; iCounter < iNumBones; iCounter++)
             {
                 classASEBone aseboneTemp = arrayaseboneMod[iCounter];
 
@@ -244,7 +258,7 @@ namespace Fallout_4___SCLP_From_ASE
 
                 strLineTMScale = listModASE[listiTMScaleIndex[iCounter]];
                 arraystrBoneXYZ = GetScalingXYZ(strLineTMScale);
-                
+
 
                 //Create the bone data
                 aseboneTemp.NodeName = strBoneName;
@@ -256,12 +270,63 @@ namespace Fallout_4___SCLP_From_ASE
                 aseboneTemp.ASENodeTM = asenodeTemp;
                 //end
 
+                //MessageBox.Show(strBoneName);
+                //MessageBox.Show("X - " + arraystrBoneXYZ[0] + " Y - " + arraystrBoneXYZ[1] + " Z - " + arraystrBoneXYZ[2]);
 
                 //Bone data is finished, now we add it to the array
                 arrayaseboneMod[iCounter] = aseboneTemp;
                 //Et voila
             }
+            #endregion
 
+
+            //Now we create the text list in json format
+            #region
+            listBoneData.Add("[");
+
+            for (iCounter = 0; iCounter < iNumBones; iCounter++)
+            {
+                strBoneName = arrayaseboneMod[iCounter].NodeName;
+
+                listBoneData.Add("  " + "{");
+                listBoneData.Add("    " + "\"Name\": \"" + strBoneName + "\",");
+
+
+                listBoneData.Add("    " + "\"Scale\": {");
+
+                listBoneData.Add("      " + "\"x\": " + arrayaseboneMod[iCounter].ASENodeTM.strTMScaleX + ",");
+                listBoneData.Add("      " + "\"y\": " + arrayaseboneMod[iCounter].ASENodeTM.strTMScaleY + ",");
+                listBoneData.Add("      " + "\"z\": " + arrayaseboneMod[iCounter].ASENodeTM.strTMScaleZ);
+
+                listBoneData.Add("    }");
+
+
+                if (iCounter == (iNumBones - 1))
+                {
+                    listBoneData.Add("  }");
+                }
+
+                else
+                {
+                    listBoneData.Add("  },");
+                }
+
+
+            }
+
+            listBoneData.Add("]");
+            #endregion
+
+
+            //Finally, output listBoneData as our .sclp file!
+            string strFileName;
+
+            if (dialogMakeSCLP.ShowDialog() == DialogResult.OK)
+            {
+                strFileName = dialogMakeSCLP.FileName;
+                System.IO.File.WriteAllLines(strFileName, listBoneData);
+            }
+            //End
 
 
         }
