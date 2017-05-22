@@ -153,7 +153,7 @@ namespace Fallout_4___SCLP_From_ASE
             strLineMod = strLineMod.Substring(iFindNodeNameLength, strLineMod.Length - iFindNodeNameLength);
             //MessageBox.Show(strLineMod);
             strBoneName = strLineMod.Substring(0, strLineMod.Length - 1);
-            MessageBox.Show("Bone Name Is: "+strBoneName);
+            //MessageBox.Show("Bone Name Is: "+strBoneName);
 
             return strBoneName;
         }
