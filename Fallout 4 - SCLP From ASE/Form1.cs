@@ -153,7 +153,7 @@ namespace Fallout_4___SCLP_From_ASE
             strLineMod = strLineMod.Substring(iFindNodeNameLength, strLineMod.Length - iFindNodeNameLength);
             //MessageBox.Show(strLineMod);
             strBoneName = strLineMod.Substring(0, strLineMod.Length - 1);
-            //MessageBox.Show("Bone Name Is: "+strBoneName);
+            MessageBox.Show("Bone Name Is: "+strBoneName);
 
             return strBoneName;
         }
@@ -177,7 +177,7 @@ namespace Fallout_4___SCLP_From_ASE
             List<int> listiNodeNameIndex = new List<int>();
             List<int> listiNodeTMIndex = new List<int>();
             List<int> listiTMScaleIndex = new List<int>();
-            List<int> listiDuplicateBoneIndex = new List<int>();
+            List<int> listiNonSkinBoneSubIndex = new List<int>();
 
             int iNumBones = 0;
             #endregion
@@ -199,33 +199,35 @@ namespace Fallout_4___SCLP_From_ASE
                 }
             }
 
-
-            //Get indexes of unchanged bones
-            for (iCounter = 0; iCounter < iNumBones; iCounter++)
-            {
-                if (listSourceASE[listiTMScaleIndex[iCounter]] == listModASE[listiTMScaleIndex[iCounter]])
-                {
-                    listiDuplicateBoneIndex.Add(listiGeomObjectIndex[iCounter]);
-                }
-            }
-
-            //Remove unchanged bone indexes from lists
-            foreach (int iIndex in listiDuplicateBoneIndex)
+            
+            //Remove non-skin bones
+            foreach (int iIndex in listiNodeNameIndex)
             {
 
-                for (iCounter = (iNumBones - 1); iCounter >= 0; iCounter--)
+                if ( (listSourceASE[iIndex].IndexOf("_skin", StringComparison.CurrentCultureIgnoreCase) == -1) && (listiNodeNameIndex.Contains(iIndex)) )
                 {
-                    if (iIndex == listiGeomObjectIndex[iCounter])
-                    {
-                        listiGeomObjectIndex.RemoveAt(iCounter);
-                        listiNodeNameIndex.RemoveAt(iCounter);
-                        listiNodeTMIndex.RemoveAt(iCounter);
-                        listiTMScaleIndex.RemoveAt(iCounter);
-                        iNumBones--;
-                    }
+                    listiNonSkinBoneSubIndex.Add(iIndex);
                 }
 
             }
+
+            for (iCounter = 0; iCounter <= listiNonSkinBoneSubIndex.Count - 1; iCounter++ )
+            {
+                if (listiGeomObjectIndex.Contains(listiNonSkinBoneSubIndex[iCounter] - 1))
+                {
+                    listiGeomObjectIndex.Remove(listiNonSkinBoneSubIndex[iCounter] - 1);
+
+                    //MessageBox.Show(listSourceASE[ listiNodeNameIndex[ listiNonSkinBoneSubIndex[iCounter] ] ]);
+
+                    listiNodeNameIndex.Remove(listiNonSkinBoneSubIndex[iCounter]);
+                    listiNodeTMIndex.Remove(listiNonSkinBoneSubIndex[iCounter] + 2);
+                    listiTMScaleIndex.Remove(listiNonSkinBoneSubIndex[iCounter] + 14);
+                }
+            }
+
+
+            iNumBones = listiGeomObjectIndex.Count();
+
             #endregion
 
 
