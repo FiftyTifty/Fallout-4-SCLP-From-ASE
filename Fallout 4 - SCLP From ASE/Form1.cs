@@ -153,7 +153,6 @@ namespace Fallout_4___SCLP_From_ASE
             strLineMod = strLineMod.Substring(iFindNodeNameLength, strLineMod.Length - iFindNodeNameLength);
             //MessageBox.Show(strLineMod);
             strBoneName = strLineMod.Substring(0, strLineMod.Length - 1);
-            strBoneName = strBoneName.Remove(0, 2); //Have to remove two characters to cut out the ". Dunno why.
             //MessageBox.Show("Bone Name Is: "+strBoneName);
 
             return strBoneName;
@@ -191,11 +190,12 @@ namespace Fallout_4___SCLP_From_ASE
             {
                 if (listSourceASE[iCounter].Contains(strFindGeomObject))
                 {
-                    listiGeomObjectIndex.Add(iCounter + 1);
-                    listiNodeNameIndex.Add(iCounter + 2);
+                    listiGeomObjectIndex.Add(iCounter);
+                    listiNodeNameIndex.Add(iCounter + 1);
                     listiNodeTMIndex.Add(iCounter + 3);
                     listiTMScaleIndex.Add(iCounter + 15);
                     iNumBones++;
+                    iCounter = iCounter + 15;
                 }
             }
 
