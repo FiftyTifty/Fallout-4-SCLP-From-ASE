@@ -122,6 +122,7 @@
             this.ClientSize = new System.Drawing.Size(555, 140);
             this.Controls.Add(this.groupFilePaths);
             this.Name = "windowProgram";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Fallout 4 - SCLP From ASE";
             this.groupFilePaths.ResumeLayout(false);
             this.groupFilePaths.PerformLayout();
